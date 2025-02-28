@@ -50,7 +50,7 @@ local function createUI()
         local key = TextBox.Text
         if checkKey(key) then
             ScreenGui:Destroy()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Zunes-Bypassed/NOPE/main/Min.lua"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/wpisstestfprg/Volcano/refs/heads/main/VolcanoNewUpdated.luau"))()
         else
             Title.Text = "Key sai! Nhập lại."
             Title.TextColor3 = Color3.fromRGB(255, 0, 0)
