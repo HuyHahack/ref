@@ -1,6 +1,6 @@
 local keySystem = {
-    ["huy30"] = true, -- Key hợp lệ
-    ["huy30"] = true, -- Key hợp lệ
+    ["huy29"] = true, -- Key hợp lệ
+    ["huy29"] = true, -- Key hợp lệ
 }
 
 local function checkKey(inputKey)
@@ -51,6 +51,17 @@ local function createUI()
         if checkKey(key) then
             ScreenGui:Destroy()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/wpisstestfprg/Volcano/refs/heads/main/VolcanoNewUpdated.luau"))()
+            
+            -- Bắt đầu đếm 30 phút
+            local startTime = tick()
+            task.spawn(function()
+                while task.wait(1) do
+                    if tick() - startTime >= 200 then  -- 30 phút
+                        game.Players.LocalPlayer:Kick("Key đã hết hạn! Vui lòng nhập lại key mới.")
+                        break
+                    end
+                end
+            end)
         else
             Title.Text = "Key sai! Nhập lại."
             Title.TextColor3 = Color3.fromRGB(255, 0, 0)
