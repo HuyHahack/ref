@@ -1,6 +1,6 @@
 local keySystem = {
-    ["huy29"] = true, -- Key hợp lệ
-    ["huy29"] = true, -- Key hợp lệ
+    ["huy50"] = true, -- Key hợp lệ
+    ["huy50"] = true, -- Key hợp lệ
 }
 
 local function checkKey(inputKey)
@@ -56,7 +56,7 @@ local function createUI()
             local startTime = tick()
             task.spawn(function()
                 while task.wait(1) do
-                    if tick() - startTime >= 200 then  -- 30 phút
+                    if tick() - startTime >= 3600 then  -- 30 phút
                         game.Players.LocalPlayer:Kick("Key đã hết hạn! Vui lòng nhập lại key mới.")
                         break
                     end
