@@ -1,6 +1,6 @@
 local keySystem = {
     ["xhahavakiagwv"] = true, -- Key hợp lệ
-    ["xhahavakiagwn"] = true, -- Key hợp lệ khác
+    ["xhahavakiagwv"] = true, -- Key hợp lệ khác
 }
 
 local function checkKey(inputKey)
@@ -14,7 +14,6 @@ local function createUI()
     local Button = Instance.new("TextButton")
     local Title = Instance.new("TextLabel")
     local GetKeyButton = Instance.new("TextButton")
-    local KeyLabel = Instance.new("TextLabel")
 
     ScreenGui.Parent = game.CoreGui
     Frame.Parent = ScreenGui
@@ -57,22 +56,12 @@ local function createUI()
     GetKeyButton.BackgroundColor3 = Color3.fromRGB(0, 100, 255)
     GetKeyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-    -- Nhãn hiển thị key
-    KeyLabel.Parent = Frame
-    KeyLabel.Text = "Current Key: huy50"
-    KeyLabel.Size = UDim2.new(1, 0, 0.2, 0)
-    KeyLabel.Position = UDim2.new(0, 0, 0.5, 0)
-    KeyLabel.TextSize = 16
-    KeyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    KeyLabel.BackgroundTransparency = 1
-
-    -- Xử lý nút Get Key để sao chép link lấy key
+    -- Sự kiện khi bấm nút Get Key (sao chép link)
     GetKeyButton.MouseButton1Click:Connect(function()
-        local keyLink = "https://huyhahack.github.io/Step-1/"  -- Thay bằng link thực tế lấy key của bạn
-        setclipboard(keyLink)  -- Sao chép link vào clipboard
-        KeyLabel.Text = "Link lấy key đã được sao chép!"  -- Cập nhật thông báo cho người dùng
+        setclipboard("https://huyhahack.github.io/Step-1/")  -- Thay bằng link lấy key thật
     end)
 
+    -- Sự kiện khi bấm nút Xác nhận
     Button.MouseButton1Click:Connect(function()
         local key = TextBox.Text
         if checkKey(key) then
