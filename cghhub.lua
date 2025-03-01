@@ -1,6 +1,6 @@
 local keySystem = {
     ["huy50"] = true, -- Key hợp lệ
-    ["huy50"] = true, -- Key hợp lệ
+    ["huy51"] = true, -- Key hợp lệ khác
 }
 
 local function checkKey(inputKey)
@@ -13,12 +13,14 @@ local function createUI()
     local TextBox = Instance.new("TextBox")
     local Button = Instance.new("TextButton")
     local Title = Instance.new("TextLabel")
+    local GetKeyButton = Instance.new("TextButton")
+    local KeyLabel = Instance.new("TextLabel")
 
     ScreenGui.Parent = game.CoreGui
     Frame.Parent = ScreenGui
     Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    Frame.Size = UDim2.new(0, 300, 0, 200)
-    Frame.Position = UDim2.new(0.5, -150, 0.5, -100)
+    Frame.Size = UDim2.new(0, 300, 0, 250)  -- Thêm không gian cho nút Get Key
+    Frame.Position = UDim2.new(0.5, -150, 0.5, -125)
     Frame.BorderSizePixel = 2
     Frame.BorderColor3 = Color3.fromRGB(0, 255, 127)
 
@@ -46,6 +48,31 @@ local function createUI()
     Button.BackgroundColor3 = Color3.fromRGB(0, 200, 127)
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+    -- Nút "Get Key"
+    GetKeyButton.Parent = Frame
+    GetKeyButton.Size = UDim2.new(0.6, 0, 0.2, 0)
+    GetKeyButton.Position = UDim2.new(0.2, 0, 0.8, 0)
+    GetKeyButton.Text = "Get Key"
+    GetKeyButton.TextSize = 16
+    GetKeyButton.BackgroundColor3 = Color3.fromRGB(0, 100, 255)
+    GetKeyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+    -- Nhãn hiển thị key
+    KeyLabel.Parent = Frame
+    KeyLabel.Text = "Current Key: huy50"
+    KeyLabel.Size = UDim2.new(1, 0, 0.2, 0)
+    KeyLabel.Position = UDim2.new(0, 0, 0.5, 0)
+    KeyLabel.TextSize = 16
+    KeyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    KeyLabel.BackgroundTransparency = 1
+
+    -- Xử lý nút Get Key để sao chép link lấy key
+    GetKeyButton.MouseButton1Click:Connect(function()
+        local keyLink = "https://example.com/get-key?huy50"  -- Thay bằng link thực tế lấy key của bạn
+        setclipboard(keyLink)  -- Sao chép link vào clipboard
+        KeyLabel.Text = "Link lấy key đã được sao chép!"  -- Cập nhật thông báo cho người dùng
+    end)
+
     Button.MouseButton1Click:Connect(function()
         local key = TextBox.Text
         if checkKey(key) then
@@ -56,7 +83,7 @@ local function createUI()
             local startTime = tick()
             task.spawn(function()
                 while task.wait(1) do
-                    if tick() - startTime >= 3600 then  -- 30 phút
+                    if tick() - startTime >= 86400 then  -- 30 phút
                         game.Players.LocalPlayer:Kick("Key đã hết hạn! Vui lòng nhập lại key mới.")
                         break
                     end
