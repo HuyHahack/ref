@@ -1,6 +1,6 @@
 local keySystem = {
-    ["huy50"] = true, -- Key hợp lệ
-    ["huy51"] = true, -- Key hợp lệ khác
+    ["xhahavakiagwv"] = true, -- Key hợp lệ
+    ["xhahavakiagwn"] = true, -- Key hợp lệ khác
 }
 
 local function checkKey(inputKey)
