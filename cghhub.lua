@@ -68,7 +68,7 @@ local function createUI()
 
     -- Xử lý nút Get Key để sao chép link lấy key
     GetKeyButton.MouseButton1Click:Connect(function()
-        local keyLink = "https://example.com/get-key?huy50"  -- Thay bằng link thực tế lấy key của bạn
+        local keyLink = "https://huyhahack.github.io/Step-1/"  -- Thay bằng link thực tế lấy key của bạn
         setclipboard(keyLink)  -- Sao chép link vào clipboard
         KeyLabel.Text = "Link lấy key đã được sao chép!"  -- Cập nhật thông báo cho người dùng
     end)
