@@ -102,7 +102,7 @@ def start_attack(ip, port, method, duration, rq):
 
 def auto_mode():
     print("=== NetDrain Auto Mode ===")
-    print("""
+    print(r"""
    ____             _       _         _          
   |  _ \  __ _ _ __(_) __ _| |__  ___| |_ _   _  
   | | | |/ _` | '__| |/ _` | '_ \/ __| __| | | | 
@@ -111,11 +111,12 @@ def auto_mode():
                       |___/              |___/  
         NetDrain Auto v2.0 by Ngzz Dat
     """)
+    
+    log("[✓] Auto mode khởi động thành công. Bắt đầu quá trình xử lý mục tiêu...\n")
 
-    # --- Cấu hình mặc định cho mỗi mục tiêu ---
     default_port = 80
     default_method = "udp"
-    default_duration = 15  # giây
+    default_duration = 15
     default_threads = 10
 
     for ip in ip_list:
