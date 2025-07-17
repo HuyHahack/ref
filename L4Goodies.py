@@ -101,8 +101,8 @@ def auto_mode():
 
     default_port = 10018
     default_method = "udp"
-    default_duration = 200
-    default_threads = 660
+    default_duration = 220
+    default_threads = 10
 
     for ip in ip_list:
         log(f"[*] Đang kiểm tra mục tiêu {ip}")
