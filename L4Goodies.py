@@ -100,10 +100,10 @@ def auto_mode():
         log("[!] Không có IP để tấn công. Kiểm tra lại targets.txt")
         sys.exit(1)
 
-    default_port = 80
+    default_port = 10018
     default_method = "udp"
-    default_duration = 15
-    default_threads = 10
+    default_duration = 200
+    default_threads = 660
 
     for ip in ip_list:
         log(f"[*] Đang kiểm tra mục tiêu {ip}")
