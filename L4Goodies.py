@@ -83,8 +83,7 @@ def start_attack(ip, port, method, duration, rq):
     log("[✓] Attack time is over.")
 
 def auto_mode():
-    print("=== NetDrain Auto Mode ===")
-    print("""
+    print(r"""
    ____             _       _         _          
   |  _ \  __ _ _ __(_) __ _| |__  ___| |_ _   _  
   | | | |/ _` | '__| |/ _` | '_ \/ __| __| | | | 
